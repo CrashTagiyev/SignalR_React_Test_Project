@@ -15,7 +15,6 @@ const WaitingRoom = ({ JoinChat, sendMail, messagesFromProps }) => {
     const response = await JoinChat(username, groupName);
     return response;
   };
-
   const sendMessage = async (e) => {
     e.preventDefault();
     const messageResponse = await sendMail(

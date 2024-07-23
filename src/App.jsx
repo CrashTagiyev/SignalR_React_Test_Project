@@ -9,18 +9,18 @@ function App() {
 
   const JoinChat = async (username, groupName) => {
     var connection = new HubConnectionBuilder()
-      .withUrl("http://localhost:5127/chathub", {
-        withCredentials: true, // Ensure credentials are included
+      .withUrl("http://localhost:5067/chathub", {
+        withCredentials: true, 
       })
       .withAutomaticReconnect()
       .build();
       
-    connection.on("GroupAnnouncement", (username, message) => {
-      console.log(username);
-      console.log(message);
-    });
+    // connection.on("CreateConnection", (username, message) => {
+    //   console.log(username);
+    //   console.log(message);
+    // });
 
-    connection.on("SendMailToTheGroup", (username, message, groupname) => {
+    connection.on("SendMessage", (username, message, groupname) => {
       console.log(
         username + ":" + message + " to the group named " + groupname
       );
@@ -31,7 +31,7 @@ function App() {
     try {
       await connection.start();
       setStateConnection(connection);
-      await connection.invoke("JoinChat", { username, groupName });
+      await connection.invoke("CreateConnection", { username, groupName });
       console.log(connection);
       console.log("Connection started successfully");
     } catch (error) {
@@ -41,10 +41,10 @@ function App() {
   const sendMail = async (username, message, groupName) => {
     try {
       var responseMessage = await stateconnection.invoke(
-        "SendMail",
-        username,
+        "SendMessageToChat",
+        {username,
         message,
-        groupName
+        groupName}
       );
       return responseMessage;
     } catch (error) {
